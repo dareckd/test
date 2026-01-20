@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой сайт из GitHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Автоматический деплой с GitHub</h1>
+        <p>Этот сайт автоматически обновляется при каждом коммите</p>
+    </div>
+    
+    <div class="content">
+        <h2 class="success">✅ Сайт работает!</h2>
+        <p>Если вы видите эту страницу, значит:</p>
+        <ul>
+            <li>Visual Studio успешно пушит код в GitHub</li>
+            <li>GitHub Actions запускает workflow</li>
+            <li>Runner на Ubuntu копирует файлы в /var/www/html/</li>
+            <li>Веб-сервер (nginx/apache) отдает статику</li>
+        </ul>
+        
+        <h3>Технические детали:</h3>
+        <ul>
+            <li>Репозиторий: dareckd/test</li>
+            <li>Сервер: Ubuntu Linux</li>
+            <li>Путь: /var/www/html/index.html</li>
+            <li>Workflow: .github/workflows/sync-to-vs.yml</li>
+        </ul>
+        
+        <div class="timestamp">
+            <p>Последнее обновление: <span id="update-time">загружается...</span></p>
+            <p>GitHub Actions Runner: активен</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('update-time').textContent = new Date().toLocaleString();
+        
+        // Простая анимация
+        setTimeout(() => {
+            const success = document.querySelector('.success');
+            success.style.transition = 'color 0.5s';
+            success.style.color = success.style.color === 'rgb(76, 175, 80)' ? '#333' : '#4CAF50';
+        }, 1000);
+    </script>
+</body>
+</html>
