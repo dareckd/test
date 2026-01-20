@@ -1,0 +1,36 @@
+name: Sync to Visual Studio
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:  # Ручной запуск из интерфейса
+
+jobs:
+  sync-to-vs:
+    runs-on: self-hosted  # Будет запускаться на вашем Linux runner
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Display repository contents
+      run: |
+        echo "📁 Содержимое репозитория:"
+        ls -la
+        echo ""
+        echo "📄 Измененные файлы:"
+        git log -1 --name-status --oneline
+        
+    - name: Setup SSH for Windows sync (пример)
+      run: |
+        echo "Здесь будет настройка SSH для подключения к Windows"
+        # Установите SSH ключ:
+        # mkdir -p ~/.ssh
+        # echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        # chmod 600 ~/.ssh/id_rsa
+        
+    - name: Notify sync completion
+      run: |
+        echo "✅ Код успешно получен на runner"
+        echo "📁 Директория: $PWD"
+        echo "🔄 Следующий шаг - настроить синхронизацию с Windows"
