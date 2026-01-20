@@ -1,8 +1,8 @@
-name: Deploy to Web Server
+name: Deploy Website
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -13,53 +13,27 @@ jobs:
     - name: 📥 Checkout code
       uses: actions/checkout@v3
       
-    - name: 📋 List files
-      run: |
-        echo "📁 Файлы в репозитории:"
-        ls -la
-        echo ""
-        echo "📄 Содержимое index.html (первые 10 строк):"
-        head -10 index.html
-        
     - name: 🚀 Deploy to web server
       run: |
         echo "Начинаю деплой..."
         
-        # Проверяем существует ли index.html
-        if [ ! -f "index.html" ]; then
-          echo "❌ Ошибка: index.html не найден!"
+        # Проверяем есть ли index.html
+        if [ -f "index.html" ]; then
+          echo "✅ index.html найден, копирую..."
+          sudo cp -v index.html /var/www/html/
+          echo "✅ Файл скопирован в /var/www/html/"
+        else
+          echo "❌ index.html не найден!"
           exit 1
         fi
         
-        # Копируем в папку веб-сервера
-        echo "Копирую index.html в /var/www/html/"
-        sudo cp -v index.html /var/www/html/
-        
-        # Проверяем что скопировалось
+    - name: ✅ Verify
+      run: |
+        echo "Проверяю деплой..."
         if [ -f "/var/www/html/index.html" ]; then
-          echo "✅ Файл успешно скопирован!"
-          echo "📏 Размер: $(wc -l < index.html) строк"
+          echo "🎉 Деплой успешен!"
+          echo "Сайт доступен по адресу сервера"
         else
-          echo "❌ Ошибка: файл не скопировался!"
+          echo "❌ Ошибка: файл не скопировался"
           exit 1
         fi
-        
-        # Добавляем метку времени
-        echo "Время деплоя: $(date)" | sudo tee /var/www/html/deploy_time.txt
-        
-    - name: 🌐 Test web server
-      run: |
-        echo "Проверяю веб-сервер..."
-        # Простая проверка что файл доступен
-        if curl -s -I http://localhost | grep -q "200\|301\|302"; then
-          echo "✅ Веб-сервер работает"
-        else
-          echo "⚠️  Проблемы с веб-сервером"
-        fi
-        
-    - name: ✅ Complete
-      run: |
-        echo "🎉 Деплой завершен успешно!"
-        echo "Сайт должен быть доступен по адресу сервера"
-        echo "Файл: /var/www/html/index.html"
-        echo "Время: $(date)"
